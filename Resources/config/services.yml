@@ -1,0 +1,8 @@
+parameters:
+    procergs_login_cidadao_badges.subscriber.class: PROCERGS\LoginCidadao\BadgesBundle\Event\BadgesSubscriber
+
+services:
+    procergs_login_cidadao_badges.subscriber:
+        class: %procergs_login_cidadao_badges.subscriber.class%
+        tags:
+            - { name: kernel.event_subscriber }
