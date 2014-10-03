@@ -5,9 +5,23 @@ namespace PROCERGS\LoginCidadao\BadgesBundle\Event;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\AbstractBadgesEventSubscriber;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
 use PROCERGS\LoginCidadao\BadgesBundle\Model\Badge;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class BadgesSubscriber extends AbstractBadgesEventSubscriber
 {
+
+    /** @var TranslatorInterface */
+    protected $translator;
+    
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+        
+        $this->registerBadge('has_cpf', $translator->trans('has_cpf.description', array(), 'badges'));
+        $this->registerBadge('valid_email', $translator->trans('valid_email.description', array(), 'badges'));
+        $this->registerBadge('nfg_access_lvl', $translator->trans('nfg_access_lvl.description', array(), 'badges'));
+        $this->registerBadge('voter_registration', $translator->trans('voter_registration.description', array(), 'badges'));
+    }
 
     public function onBadgeEvaluate(EvaluateBadgesEvent $event)
     {
@@ -21,17 +35,11 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
         return 'login-cidadao';
     }
 
-    public function getAvailableBadges()
-    {
-        return array();
-    }
-
     protected function checkCpf(EvaluateBadgesEvent $event)
     {
         $person = $event->getPerson();
         if (is_numeric($person->getCpf()) && strlen($person->getNfgAccessToken()) > 0) {
-            $badge = new Badge($this->getName(), 'has_cpf', true);
-            $event->registerBadge($badge);
+            $event->registerBadge($this->getBadge('has_cpf', true));
         }
     }
 
@@ -39,8 +47,7 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
     {
         $person = $event->getPerson();
         if ($person->getEmailConfirmedAt() instanceof \DateTime && is_null($person->getConfirmationToken())) {
-            $badge = new Badge($this->getName(), 'valid_email', true);
-            $event->registerBadge($badge);
+            $event->registerBadge($this->getBadge('valid_email', true));
         }
     }
 
@@ -49,13 +56,21 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
         $person = $event->getPerson();
         if ($person->getNfgProfile()) {
 
-            $event->registerBadge(new Badge($this->getName(), 'nfg_access_lvl',
-                                            $person->getNfgProfile()->getAccessLvl()));
+            $event->registerBadge($this->getBadge('nfg_access_lvl',
+                                                  $person->getNfgProfile()->getAccessLvl()));
 
             if ($person->getNfgProfile()->getVoterRegistrationSit() > 0) {
-                $event->registerBadge(new Badge($this->getName(),
-                                                'voter_registration', true));
+                $event->registerBadge($this->getBadge('voter_registration', true));
             }
+        }
+    }
+
+    protected function getBadge($name, $data)
+    {
+        if (array_key_exists($name, $this->getAvailableBadges())) {
+            return new Badge($this->getName(), $name, $data);
+        } else {
+            throw new Exception("Badge $name not found in namespace {$this->getName()}.");
         }
     }
 

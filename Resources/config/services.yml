@@ -4,5 +4,6 @@ parameters:
 services:
     procergs_login_cidadao_badges.subscriber:
         class: %procergs_login_cidadao_badges.subscriber.class%
+        arguments: [ @translator ]
         tags:
             - { name: kernel.event_subscriber }
