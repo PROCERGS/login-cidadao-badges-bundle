@@ -21,6 +21,8 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
         $this->registerBadge('valid_email', $translator->trans('valid_email.description', array(), 'badges'));
         $this->registerBadge('nfg_access_lvl', $translator->trans('nfg_access_lvl.description', array(), 'badges'));
         $this->registerBadge('voter_registration', $translator->trans('voter_registration.description', array(), 'badges'));
+        
+        $this->setName('login-cidadao');
     }
 
     public function onBadgeEvaluate(EvaluateBadgesEvent $event)
@@ -28,11 +30,6 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
         $this->checkCpf($event);
         $this->checkEmail($event);
         $this->checkNfg($event);
-    }
-
-    public function getName()
-    {
-        return 'login-cidadao';
     }
 
     protected function checkCpf(EvaluateBadgesEvent $event)
