@@ -4,6 +4,6 @@ parameters:
 services:
     procergs_login_cidadao_badges.subscriber:
         class: %procergs_login_cidadao_badges.subscriber.class%
-        arguments: [ @translator ]
+        arguments: [ @translator, @doctrine.orm.entity_manager ]
         tags:
             - { name: kernel.event_subscriber }
