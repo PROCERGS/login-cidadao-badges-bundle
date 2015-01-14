@@ -25,24 +25,25 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
         $this->translator = $translator;
         $this->em = $em;
 
+        $namespace = 'login-cidadao';
+        $this->setName($namespace);
+
         $this->registerBadge('has_cpf',
-                             $translator->trans('has_cpf.description', array(),
-                                                'badges'),
+                             $translator->trans("$namespace.has_cpf.description",
+                                                array(), 'badges'),
                                                 array('counter' => 'countHasCpf'));
         $this->registerBadge('valid_email',
-                             $translator->trans('valid_email.description',
+                             $translator->trans("$namespace.valid_email.description",
                                                 array(), 'badges'),
                                                 array('counter' => 'countValidEmail'));
         $this->registerBadge('nfg_access_lvl',
-                             $translator->trans('nfg_access_lvl.description',
+                             $translator->trans("$namespace.nfg_access_lvl.description",
                                                 array(), 'badges'),
                                                 array('counter' => 'countNfgAccessLvl'));
         $this->registerBadge('voter_registration',
-                             $translator->trans('voter_registration.description',
+                             $translator->trans("$namespace.voter_registration.description",
                                                 array(), 'badges'),
                                                 array('counter' => 'countVoterRegistration'));
-
-        $this->setName('login-cidadao');
     }
 
     public function onBadgeEvaluate(EvaluateBadgesEvent $event)

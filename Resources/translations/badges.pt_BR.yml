@@ -1,4 +1,9 @@
-has_cpf.description: Medalha concedida a quem informou seu CPF.
-valid_email.description: Medalha concedida a quem confirmou seu endereço de email através do link enviado ao email de cadastro.
-nfg_access_lvl.description: Medalha concedida a quem tem sua conta da NFG vinculada ao Login Cidadão.
-voter_registration.description: Medalha concedida a quem informou seu Título de Eleitor.
+login-cidadao.title: Login Cidadão
+login-cidadao.has_cpf.title: CPF Válido
+login-cidadao.has_cpf.description: Medalha concedida a quem informou seu CPF.
+login-cidadao.valid_email.title: Email Confirmado
+login-cidadao.valid_email.description: Medalha concedida a quem confirmou seu endereço de email através do link enviado ao email de cadastro.
+login-cidadao.nfg_access_lvl.title: Nível na Nota Fiscal Gaúcha
+login-cidadao.nfg_access_lvl.description: Medalha concedida a quem tem sua conta da NFG vinculada ao Login Cidadão.
+login-cidadao.voter_registration.title: Título de Eleitor Válido
+login-cidadao.voter_registration.description: Medalha concedida a quem informou seu Título de Eleitor.
