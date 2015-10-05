@@ -75,7 +75,9 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
     protected function checkCpf(EvaluateBadgesEvent $event)
     {
         $person = $event->getPerson();
-        if (is_numeric($person->getCpf()) && strlen($person->getNfgAccessToken()) > 0) {
+        $nfg    = !method_exists($person, 'getNfgAccessToken') ||
+            (strlen($person->getNfgAccessToken()) > 0);
+        if (is_numeric($person->getCpf()) && $nfg) {
             $event->registerBadge($this->getBadge('has_cpf', true));
         }
     }
