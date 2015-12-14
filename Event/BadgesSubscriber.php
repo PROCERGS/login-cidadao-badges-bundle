@@ -2,13 +2,13 @@
 
 namespace LoginCidadao\BadgesBundle\Event;
 
-use PROCERGS\LoginCidadao\BadgesControlBundle\Model\AbstractBadgesEventSubscriber;
-use PROCERGS\LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
-use PROCERGS\LoginCidadao\BadgesControlBundle\Event\ListBearersEvent;
+use LoginCidadao\BadgesControlBundle\Model\AbstractBadgesEventSubscriber;
+use LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
+use LoginCidadao\BadgesControlBundle\Event\ListBearersEvent;
 use LoginCidadao\BadgesBundle\Model\Badge;
 use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\ORM\EntityManager;
-use PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
+use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 
 class BadgesSubscriber extends AbstractBadgesEventSubscriber
 {

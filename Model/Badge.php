@@ -2,7 +2,7 @@
 
 namespace LoginCidadao\BadgesBundle\Model;
 
-use PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
+use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 
 class Badge implements BadgeInterface
 {
