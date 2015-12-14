@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\BadgesBundle\Model;
+namespace LoginCidadao\BadgesBundle\Model;
 
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 

@@ -1,9 +1,9 @@
 parameters:
-    procergs_login_cidadao_badges.subscriber.class: PROCERGS\LoginCidadao\BadgesBundle\Event\BadgesSubscriber
+    login_cidadao_badges.subscriber.class: LoginCidadao\BadgesBundle\Event\BadgesSubscriber
 
 services:
-    procergs_login_cidadao_badges.subscriber:
-        class: %procergs_login_cidadao_badges.subscriber.class%
+    login_cidadao_badges.subscriber:
+        class: %login_cidadao_badges.subscriber.class%
         arguments: [ @translator, @doctrine.orm.entity_manager ]
         tags:
             - { name: kernel.event_subscriber }

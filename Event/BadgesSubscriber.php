@@ -1,11 +1,11 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\BadgesBundle\Event;
+namespace LoginCidadao\BadgesBundle\Event;
 
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\AbstractBadgesEventSubscriber;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Event\ListBearersEvent;
-use PROCERGS\LoginCidadao\BadgesBundle\Model\Badge;
+use LoginCidadao\BadgesBundle\Model\Badge;
 use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
@@ -114,7 +114,7 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
 
     protected function countHasCpf()
     {
-        return $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
+        return $this->em->getRepository('LoginCidadaoCoreBundle:Person')
                 ->createQueryBuilder('p')
                 ->select('COUNT(p)')
                 ->andWhere('p.cpf IS NOT NULL')
@@ -124,7 +124,7 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
 
     protected function countValidEmail()
     {
-        return $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
+        return $this->em->getRepository('LoginCidadaoCoreBundle:Person')
                 ->createQueryBuilder('p')
                 ->select('COUNT(p)')
                 ->andWhere('p.confirmationToken IS NULL')
@@ -140,10 +140,10 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
             "3" => 0
         );
 
-        $query = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
+        $query = $this->em->getRepository('LoginCidadaoCoreBundle:Person')
             ->createQueryBuilder('p')
             ->select('n.accessLvl, COUNT(n) total')
-            ->join('PROCERGSLoginCidadaoCoreBundle:NfgProfile', 'n', 'WITH',
+            ->join('LoginCidadaoCoreBundle:NfgProfile', 'n', 'WITH',
                    'p.nfgProfile = n')
             ->groupBy('n.accessLvl');
 
@@ -168,10 +168,10 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
 
     protected function countVoterRegistration()
     {
-        return $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
+        return $this->em->getRepository('LoginCidadaoCoreBundle:Person')
                 ->createQueryBuilder('p')
                 ->select('COUNT(p)')
-                ->join('PROCERGSLoginCidadaoCoreBundle:NfgProfile', 'n', 'WITH',
+                ->join('LoginCidadaoCoreBundle:NfgProfile', 'n', 'WITH',
                        'p.nfgProfile = n')
                 ->andWhere('n.voterRegistrationSit > 0')
                 ->getQuery()->getSingleScalarResult();
