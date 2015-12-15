@@ -1,0 +1,36 @@
+.badges-list .badge-has_cpf {
+    background-color: #8DDAFC;
+    border: solid 1px #5AB9DB;
+}
+
+.badges-list .badge-has_cpf:before {
+    content: "CPF";
+}
+
+.badges-list .badge-valid_email {
+    background-color: #FF7171;
+    border: solid 1px #D58D8D;
+}
+
+.badges-list .badge-valid_email:before {
+    content: "@";
+    font-size: 30px;
+}
+
+.badges-list .badge-nfg_access_lvl {
+    background-color: #FAB60F;
+    border: solid 1px #D58D8D;
+}
+
+.badges-list .badge-nfg_access_lvl:before {
+    content: "NFG";
+}
+
+.badges-list .badge-voter_registration {
+    background-color: #C3EC87;
+    border: solid 1px #A0BBA6;
+}
+
+.badges-list .badge-voter_registration:before {
+    content: "TSE";
+}
