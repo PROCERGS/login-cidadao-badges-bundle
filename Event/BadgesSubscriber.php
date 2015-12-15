@@ -80,7 +80,7 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
     protected function checkEmail(EvaluateBadgesEvent $event)
     {
         $person = $event->getPerson();
-        if ($person->getEmailConfirmedAt() instanceof \DateTime && is_null($person->getConfirmationToken())) {
+        if ($person->getEmailConfirmedAt() instanceof \DateTime && !$person->getConfirmationToken()) {
             $event->registerBadge($this->getBadge('valid_email', true));
         }
     }
