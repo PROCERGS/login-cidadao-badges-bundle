@@ -5,10 +5,10 @@ namespace LoginCidadao\BadgesBundle\Event;
 use LoginCidadao\BadgesControlBundle\Model\AbstractBadgesEventSubscriber;
 use LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
 use LoginCidadao\BadgesControlBundle\Event\ListBearersEvent;
+use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use LoginCidadao\BadgesBundle\Model\Badge;
 use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\ORM\EntityManager;
-use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 
 class BadgesSubscriber extends AbstractBadgesEventSubscriber
 {
@@ -33,19 +33,12 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
         $this->registerBadge('valid_email',
             $translator->trans("$namespace.valid_email.description", array(),
                 'badges'), array('counter' => 'countValidEmail'));
-        $this->registerBadge('nfg_access_lvl',
-            $translator->trans("$namespace.nfg_access_lvl.description", array(),
-                'badges'), array('counter' => 'countNfgAccessLvl'));
-        $this->registerBadge('voter_registration',
-            $translator->trans("$namespace.voter_registration.description",
-                array(), 'badges'), array('counter' => 'countVoterRegistration'));
     }
 
     public function onBadgeEvaluate(EvaluateBadgesEvent $event)
     {
         $this->checkCpf($event);
         $this->checkEmail($event);
-        $this->checkNfg($event);
     }
 
     public function onListBearers(ListBearersEvent $event)
@@ -70,9 +63,7 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
     protected function checkCpf(EvaluateBadgesEvent $event)
     {
         $person = $event->getPerson();
-        $nfg    = !method_exists($person, 'getNfgAccessToken') ||
-            (strlen($person->getNfgAccessToken()) > 0);
-        if (is_numeric($person->getCpf()) && $nfg) {
+        if (is_numeric($person->getCpf())) {
             $event->registerBadge($this->getBadge('has_cpf', true));
         }
     }
@@ -82,19 +73,6 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
         $person = $event->getPerson();
         if ($person->getEmailConfirmedAt() instanceof \DateTime && !$person->getConfirmationToken()) {
             $event->registerBadge($this->getBadge('valid_email', true));
-        }
-    }
-
-    protected function checkNfg(EvaluateBadgesEvent $event)
-    {
-        $person = $event->getPerson();
-        if (method_exists($person, 'getNfgProfile') && $person->getNfgProfile()) {
-            $event->registerBadge($this->getBadge('nfg_access_lvl',
-                    $person->getNfgProfile()->getAccessLvl()));
-
-            if ($person->getNfgProfile()->getVoterRegistrationSit() > 0) {
-                $event->registerBadge($this->getBadge('voter_registration', true));
-            }
         }
     }
 
@@ -109,13 +87,10 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
 
     protected function countHasCpf()
     {
-        return $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:PersonMeuRS')
-                ->createQueryBuilder('m')
+        return $this->em->getRepository('LoginCidadaoCoreBundle:Person')
+                ->createQueryBuilder('p')
                 ->select('COUNT(p)')
-                ->join('LoginCidadaoCoreBundle:Person', 'p', 'WITH',
-                    'm.person = p')
                 ->andWhere('p.cpf IS NOT NULL')
-                ->andWhere('m.nfgAccessToken IS NOT NULL')
                 ->getQuery()->getSingleScalarResult();
     }
 
@@ -126,53 +101,6 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
                 ->select('COUNT(p)')
                 ->andWhere('p.confirmationToken IS NULL')
                 ->andWhere('p.emailConfirmedAt IS NOT NULL')
-                ->getQuery()->getSingleScalarResult();
-    }
-
-    protected function countNfgAccessLvl($filterData = null)
-    {
-        $empty = array(
-            "1" => 0,
-            "2" => 0,
-            "3" => 0
-        );
-
-        $query = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:PersonMeuRS')
-            ->createQueryBuilder('m')
-            ->select('n.accessLvl, COUNT(n) total')
-            ->join('PROCERGSLoginCidadaoCoreBundle:NfgProfile', 'n', 'WITH',
-                'm.nfgProfile = n')
-            ->groupBy('n.accessLvl');
-
-        if ($filterData !== null) {
-            $query->andWhere('n.accessLvl = :filterData')
-                ->setParameters(compact('filterData'));
-        }
-
-        $count = $query->getQuery()->getResult();
-        if (!empty($count)) {
-            $original = $count;
-            $count    = $empty;
-            foreach ($original as $line) {
-                $level         = $line['accessLvl'];
-                $count[$level] = $line['total'];
-            }
-            return $count;
-        } else {
-            return $empty;
-        }
-    }
-
-    protected function countVoterRegistration()
-    {
-        return $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:PersonMeuRS')
-                ->createQueryBuilder('m')
-                ->select('COUNT(p)')
-                ->join('PROCERGSLoginCidadaoCoreBundle:NfgProfile', 'n', 'WITH',
-                    'm.nfgProfile = n')
-                ->join('LoginCidadaoCoreBundle:Person', 'p', 'WITH',
-                    'm.person = p')
-                ->andWhere('n.voterRegistrationSit > 0')
                 ->getQuery()->getSingleScalarResult();
     }
 }

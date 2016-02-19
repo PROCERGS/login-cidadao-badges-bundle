@@ -3,7 +3,3 @@ login-cidadao.has_cpf.title: Valid CPF
 login-cidadao.has_cpf.description: Badge given to those who informed their CPF.
 login-cidadao.valid_email.title: Confirmed Email
 login-cidadao.valid_email.description: Badge given to those who confirmed their email address clicking on the link sent to the given email.
-login-cidadao.nfg_access_lvl.title: Nota Fiscal Gaúcha's Level
-login-cidadao.nfg_access_lvl.description: Badge given to those who have their Nota Fiscal Gaúcha account linked to Citizen Login.
-login-cidadao.voter_registration.title: Valid Voter Registration
-login-cidadao.voter_registration.description: Badge given to those who typed their voter registration.
