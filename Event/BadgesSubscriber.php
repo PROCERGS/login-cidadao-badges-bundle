@@ -71,7 +71,7 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
     protected function checkEmail(EvaluateBadgesEvent $event)
     {
         $person = $event->getPerson();
-        if ($person->getEmailConfirmedAt() instanceof \DateTime && !$person->getConfirmationToken()) {
+        if ($person->getEmailConfirmedAt() instanceof \DateTime) {
             $event->registerBadge($this->getBadge('valid_email', true));
         }
     }
@@ -99,7 +99,6 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
         return $this->em->getRepository('LoginCidadaoCoreBundle:Person')
                 ->createQueryBuilder('p')
                 ->select('COUNT(p)')
-                ->andWhere('p.confirmationToken IS NULL')
                 ->andWhere('p.emailConfirmedAt IS NOT NULL')
                 ->getQuery()->getSingleScalarResult();
     }
