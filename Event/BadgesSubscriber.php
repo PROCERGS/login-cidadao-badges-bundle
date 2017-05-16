@@ -45,15 +45,21 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
     {
         $filterBadge = $event->getBadge();
         if ($filterBadge instanceof BadgeInterface) {
+            if (!array_key_exists($filterBadge->getName(), $this->badges)) {
+                return;
+            }
             $countMethod = $this->badges[$filterBadge->getName()]['counter'];
-            $count       = $this->{$countMethod}($filterBadge->getData());
+            $count = $this->{$countMethod}($filterBadge->getData());
 
             $event->setCount($filterBadge, $count);
         } else {
             foreach ($this->badges as $name => $badge) {
+                if (!array_key_exists($filterBadge->getName(), $this->badges)) {
+                    continue;
+                }
                 $countMethod = $badge['counter'];
-                $count       = $this->{$countMethod}();
-                $badge       = new Badge($this->getName(), $name);
+                $count = $this->{$countMethod}();
+                $badge = new Badge($this->getName(), $name);
 
                 $event->setCount($badge, $count);
             }
