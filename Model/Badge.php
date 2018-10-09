@@ -1,36 +1,18 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\BadgesBundle\Model;
 
 use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 
-class Badge implements BadgeInterface
+class Badge extends \LoginCidadao\BadgesControlBundle\Model\Badge
 {
-
-    protected $namespace;
-    protected $name;
-    protected $data;
-
-    public function __construct($namespace, $name, $data = null)
-    {
-        $this->namespace = $namespace;
-        $this->name = $name;
-        $this->data = $data;
-    }
-
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getNamespace()
-    {
-        return $this->namespace;
-    }
-
+    //
 }
